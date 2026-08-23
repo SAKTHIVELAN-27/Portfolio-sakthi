@@ -1,26 +1,231 @@
 @import "tailwindcss";
 
+/* ─── DESIGN TOKENS ─────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg:              #050505;
+  --bg-secondary:    #0A0A0A;
+  --surface:         #111111;
+  --fg:              #F5F5F5;
+  --fg-secondary:    #B8B8B8;
+  --muted:           #666666;
+  --border:          rgba(255, 255, 255, 0.12);
+  --border-subtle:   rgba(255, 255, 255, 0.06);
+
+  --accent:          #A78BFA;
+  --accent-strong:   #8B5CF6;
+  --accent-dark:     #7C3AED;
+  --accent-glow:     rgba(167, 139, 250, 0.15);
+
+  --nav-height: 64px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── RESET ─────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans), 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  line-height: 1.6;
 }
+
+/* ─── SCROLLBAR ──────────────────────────────────── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  transition: background 0.2s;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.22); }
+
+/* ─── SELECTION ──────────────────────────────────── */
+::selection { background: var(--accent-glow); color: var(--accent); }
+
+/* ─── FOCUS ──────────────────────────────────────── */
+:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
+
+/* ─── TYPOGRAPHY ─────────────────────────────────── */
+.display-hero {
+  font-size: clamp(4rem, 12vw, 12rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.88;
+  color: var(--fg);
+}
+
+.display-lg {
+  font-size: clamp(2.5rem, 6vw, 6rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  color: var(--fg);
+}
+
+.display-md {
+  font-size: clamp(1.75rem, 3.5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--fg);
+}
+
+.text-body    { font-size: 1.0625rem; color: var(--fg-secondary); line-height: 1.72; }
+.text-body-lg { font-size: 1.25rem;   color: var(--fg-secondary); line-height: 1.65; }
+.text-meta {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ─── GRAIN ANIMATION ────────────────────────────── */
+@keyframes grain {
+  0%,100% { transform: translate(0,0) }
+  10%  { transform: translate(-2%,-3%) }
+  20%  { transform: translate(2%, 2%) }
+  30%  { transform: translate(-1%, 4%) }
+  40%  { transform: translate(3%,-1%) }
+  50%  { transform: translate(-2%, 3%) }
+  60%  { transform: translate(1%,-4%) }
+  70%  { transform: translate(-3%, 2%) }
+  80%  { transform: translate(2%,-2%) }
+  90%  { transform: translate(-1%, 0) }
+}
+
+/* ─── OTHER ANIMATIONS ───────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* ─── NOISE OVERLAY ──────────────────────────────── */
+.noise-overlay {
+  position: fixed;
+  inset: -150%;
+  width: 400%;
+  height: 400%;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.025;
+  animation: grain 8s steps(1) infinite;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+}
+
+/* ─── ATMOSPHERIC GLOW ───────────────────────────── */
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 45% at 50% -5%, rgba(167,139,250,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 80% 80%, rgba(167,139,250,0.03) 0%, transparent 50%);
+}
+
+/* ─── GRID LINES (subtle bg texture) ────────────── */
+.grid-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 100% 100% at 50% 0%, black 20%, transparent 80%);
+}
+
+/* ─── LAYOUT ─────────────────────────────────────── */
+.section-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+@media (max-width: 768px) {
+  .section-container { padding: 0 1.25rem; }
+}
+
+/* ─── BUTTONS ────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8125rem 1.875rem;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background 0.22s ease, color 0.22s ease, transform 0.18s ease;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+}
+.btn-primary:hover { background: var(--accent); color: var(--bg); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8125rem 1.875rem;
+  background: transparent;
+  color: var(--fg);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.22s ease, color 0.22s ease;
+  text-decoration: none;
+}
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ─── DIVIDER ────────────────────────────────────── */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+/* ─── MAGNETIC WRAPPER ───────────────────────────── */
+.magnetic-wrapper { display: inline-block; }
+
+/* ─── ACCENT HELPERS ─────────────────────────────── */
+.text-accent   { color: var(--accent) !important; }
+.border-accent { border-color: var(--accent) !important; }
+
+/* ─── IMAGE TREATMENT ────────────────────────────── */
+.img-desaturated { filter: saturate(0.15) brightness(0.9); transition: filter 0.5s ease; }
+.img-desaturated:hover { filter: saturate(1) brightness(1); }
