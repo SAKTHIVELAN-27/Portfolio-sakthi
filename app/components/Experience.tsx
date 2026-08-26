@@ -65,6 +65,7 @@ export default function Journey() {
         background: 'var(--bg)',
         overflow: 'hidden',
       }}
+      className="section-pad"
     >
       {/* ── Waves background ────────────────── */}
       <Waves
@@ -122,6 +123,7 @@ export default function Journey() {
 
           {/* Timeline continuous line path */}
           <div
+            className="timeline-container"
             style={{
               position: 'relative',
               maxWidth: '860px',
@@ -314,6 +316,21 @@ export default function Journey() {
           </div>
         </div>
       </div>
+      <style>{`
+        @media (max-width: 640px) {
+          .timeline-container {
+            padding-left: 1.75rem !important;
+          }
+          .timeline-container > div:first-child {
+            left: 7px !important;
+          }
+        }
+        @media (max-width: 400px) {
+          .timeline-container {
+            padding-left: 1.25rem !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

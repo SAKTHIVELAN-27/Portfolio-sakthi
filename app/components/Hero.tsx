@@ -1,12 +1,52 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import RippleDistortion from '../bits/RippleDistortion';
 import StrokeText from '../bits/StrokeText';
 import MagneticButton from './MagneticButton';
 import TextType from '../bits/TextType';
 import FoldText from '../bits/FoldText';
 
+/** Returns the current inner width after mount, null before. */
+function useWindowWidth() {
+  const [width, setWidth] = useState<number | null>(null);
+  useEffect(() => {
+    // Set immediately after mount so first client render matches server (null)
+    setWidth(window.innerWidth);
+    const update = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
+  return width;
+}
+
+/** Clamp a value between min and max. */
+function clamp(val: number, min: number, max: number) {
+  return Math.min(Math.max(val, min), max);
+}
+
 export default function Hero() {
+  const width = useWindowWidth();
+
+  /**
+   * Scale the StrokeText fontSize responsively.
+   * Returns null until mounted (matches SSR output).
+   *   ≤ 360px  → 52px
+   *   360–768  → linear: 52 → 110
+   *   768–1440 → linear: 110 → 160
+   *   > 1440   → 160px
+   */
+  const strokeFontSize = width === null
+    ? null          // pre-mount / SSR — no value yet
+    : (() => {
+        if (width <= 360) return 52;
+        if (width <= 768) return clamp(52 + ((width - 360) / (768 - 360)) * (110 - 52), 52, 110);
+        if (width <= 1440) return clamp(110 + ((width - 768) / (1440 - 768)) * (160 - 110), 110, 160);
+        return 160;
+      })();
+
+  const isMobile = width !== null && width < 640;
+
   return (
     <section
       id="hero"
@@ -31,14 +71,12 @@ export default function Hero() {
           zIndex: 0,
           width: '100%',
           height: '100%',
-          /* pointer-events: none keeps the window-level ripple
-             tracking active while not blocking content clicks */
           pointerEvents: 'none',
         }}
       >
         <RippleDistortion
           src="/hero.jpg"
-          brushSize={150}
+          brushSize={isMobile ? 80 : 150}
           strength={0.2}
           swirl={1}
           rings={4}
@@ -87,7 +125,7 @@ export default function Hero() {
           zIndex: 2,
           width: '100%',
           maxWidth: '1180px',
-          padding: '0 2rem',
+          padding: isMobile ? '0 1.25rem' : '0 2rem',
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -98,7 +136,7 @@ export default function Hero() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: '3.5rem',
+            marginBottom: isMobile ? '2rem' : '3.5rem',
           }}
         >
           <span
@@ -114,47 +152,50 @@ export default function Hero() {
             Creative Developer
           </span>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <span
-              style={{
-                fontFamily: 'var(--font-geist-mono, monospace)',
-                fontSize: '0.6875rem',
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: 'var(--accent)',
-                animation: 'fadeIn 1.2s ease 0.3s both',
-              }}
-            >
-              01
-            </span>
-            <div
-              style={{
-                width: '1px',
-                height: '32px',
-                background: 'linear-gradient(to bottom, var(--accent), transparent)',
-                animation: 'fadeIn 1.2s ease 0.4s both',
-              }}
-            />
-            <span
-              style={{
-                fontFamily: 'var(--font-geist-mono, monospace)',
-                fontSize: '0.6875rem',
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: 'var(--muted)',
-                animation: 'fadeIn 1.2s ease 0.5s both',
-              }}
-            >
-              Scroll
-            </span>
-          </div>
+          {/* Hide the scroll indicator on tiny screens */}
+          {!isMobile && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <span
+                style={{
+                  fontFamily: 'var(--font-geist-mono, monospace)',
+                  fontSize: '0.6875rem',
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: 'var(--accent)',
+                  animation: 'fadeIn 1.2s ease 0.3s both',
+                }}
+              >
+                01
+              </span>
+              <div
+                style={{
+                  width: '1px',
+                  height: '32px',
+                  background: 'linear-gradient(to bottom, var(--accent), transparent)',
+                  animation: 'fadeIn 1.2s ease 0.4s both',
+                }}
+              />
+              <span
+                style={{
+                  fontFamily: 'var(--font-geist-mono, monospace)',
+                  fontSize: '0.6875rem',
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: 'var(--muted)',
+                  animation: 'fadeIn 1.2s ease 0.5s both',
+                }}
+              >
+                Scroll
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Role label — TextType animated typing */}
         <div
           style={{
             fontFamily: 'var(--font-geist-mono, monospace)',
-            fontSize: '0.8rem',
+            fontSize: isMobile ? '0.6875rem' : '0.8rem',
             letterSpacing: '0.18em',
             textTransform: 'uppercase',
             color: 'var(--fg-secondary)',
@@ -198,9 +239,10 @@ export default function Hero() {
 
         {/* ── StrokeText hero name ─────────────────── */}
         <div
+          suppressHydrationWarning
           style={{
             overflow: 'visible',
-            marginBottom: '2rem',
+            marginBottom: isMobile ? '1.25rem' : '2rem',
             animation: 'fadeIn 0.1s ease 0.6s both',
           }}
         >
@@ -215,17 +257,17 @@ export default function Hero() {
             ease="power2.out"
             trigger="mount"
             fillMode="wipe"
-            fontSize={160}
+            fontSize={strokeFontSize !== null ? Math.round(strokeFontSize) : 144}
             fontWeight={900}
-            letterSpacing={-6}
+            letterSpacing={isMobile ? -2 : -6}
           />
         </div>
 
         {/* Tagline */}
         <div
           style={{
-            maxWidth: '460px',
-            marginBottom: '2.5rem',
+            maxWidth: isMobile ? '100%' : '460px',
+            marginBottom: isMobile ? '2rem' : '2.5rem',
             animation: 'fadeUp 1s ease 1.8s both',
           }}
         >
@@ -239,7 +281,7 @@ export default function Hero() {
             ease="power3.out"
             perspective={700}
             creaseShading={0.55}
-            fontSize="clamp(1rem, 1.8vw, 1.2rem)"
+            fontSize={isMobile ? 'clamp(0.9rem, 4vw, 1rem)' : 'clamp(1rem, 1.8vw, 1.2rem)'}
             fontWeight={500}
             color="var(--fg-secondary)"
           />

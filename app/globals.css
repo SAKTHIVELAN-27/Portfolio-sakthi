@@ -195,6 +195,9 @@ body {
 @media (max-width: 768px) {
   .section-container { padding: 0 1.25rem; }
 }
+@media (max-width: 480px) {
+  .section-container { padding: 0 1rem; }
+}
 
 /* ─── BUTTONS ────────────────────────────────────── */
 .btn-primary {
@@ -252,3 +255,37 @@ body {
 /* ─── IMAGE TREATMENT ────────────────────────────── */
 .img-desaturated { filter: saturate(0.15) brightness(0.9); transition: filter 0.5s ease; }
 .img-desaturated:hover { filter: saturate(1) brightness(1); }
+
+/* ─── RESPONSIVE HELPERS ────────────────────── */
+.hide-mobile  { display: block; }
+.show-mobile  { display: none; }
+
+@media (max-width: 768px) {
+  .hide-mobile  { display: none !important; }
+  .show-mobile  { display: block !important; }
+
+  /* Section padding reduction */
+  .section-pad {
+    padding-top: 5rem !important;
+    padding-bottom: 5rem !important;
+  }
+
+  /* Buttons stack on very small screens */
+  .btn-stack-mobile {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-pad {
+    padding-top: 4rem !important;
+    padding-bottom: 4rem !important;
+  }
+
+  /* Prevent text overflow */
+  h1, h2, h3, p {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+}

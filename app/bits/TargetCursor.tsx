@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useEffect, useRef, useCallback, useMemo, useState } from 'react';
+
 import { gsap } from 'gsap';
 import './TargetCursor.css';
 
@@ -60,15 +61,17 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
   const tickerFnRef = useRef<(() => void) | null>(null);
   const activeStrengthRef = useRef(0);
 
+  const [mounted, setMounted] = useState(false);
+
   const isMobile = useMemo(() => {
-    if (typeof window === 'undefined') return false;
+    if (!mounted) return false;
     const hasTouchScreen = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     const isSmallScreen = window.innerWidth <= 768;
     const userAgent = navigator.userAgent || navigator.vendor || (window as unknown as { opera?: string }).opera || '';
     const mobileRegex = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i;
     const isMobileUserAgent = mobileRegex.test(userAgent.toLowerCase());
     return (hasTouchScreen && isSmallScreen) || isMobileUserAgent;
-  }, []);
+  }, [mounted]);
 
   const constants = useMemo(
     () => ({
@@ -90,7 +93,11 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
   }, []);
 
   useEffect(() => {
-    if (isMobile || !cursorRef.current) return;
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted || isMobile || !cursorRef.current) return;
 
     const originalCursor = document.body.style.cursor;
     if (hideDefaultCursor) {
@@ -411,7 +418,7 @@ const TargetCursor: React.FC<TargetCursorProps> = ({
     }
   }, [spinDuration, isMobile]);
 
-  if (isMobile) {
+  if (!mounted || isMobile) {
     return null;
   }
 

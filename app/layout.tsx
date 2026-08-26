@@ -34,6 +34,13 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
+
 interface LayoutProps {
   children: React.ReactNode;
 }
@@ -45,6 +52,15 @@ export default function RootLayout({ children }: LayoutProps) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head suppressHydrationWarning>
+        {/* Anti-flicker: apply saved theme before first paint */}
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t){document.documentElement.setAttribute('data-theme',t);}else if(window.matchMedia('(prefers-color-scheme:light)').matches){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--fg)]">
         <ThemeProvider>
           <TargetCursor
@@ -61,3 +77,4 @@ export default function RootLayout({ children }: LayoutProps) {
     </html>
   );
 }
+

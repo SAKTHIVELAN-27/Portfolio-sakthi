@@ -65,6 +65,7 @@ export default function Work() {
   return (
     <section
       id="work"
+      className="section-pad"
       style={{
         position: 'relative',
         zIndex: 1,
@@ -78,8 +79,8 @@ export default function Work() {
         {/* AccordionGallery */}
         <div
           style={{
-            height: 'clamp(320px, 45vw, 520px)',
-            marginBottom: '6rem',
+            height: 'clamp(220px, 45vw, 520px)',
+            marginBottom: '4rem',
             borderRadius: '2px',
             overflow: 'hidden',
           }}
@@ -97,15 +98,15 @@ export default function Work() {
           {PROJECTS.map((project, i) => (
             <div
               key={project.id}
-              className="cursor-target"
+              className="cursor-target work-row"
               onMouseEnter={() => setHovered(i)}
               onMouseLeave={() => setHovered(null)}
               style={{
                 display: 'grid',
-                gridTemplateColumns: '4rem 1fr auto',
-                gap: '2rem',
+                gridTemplateColumns: '3rem 1fr auto',
+                gap: '1.5rem',
                 alignItems: 'center',
-                padding: '2rem 0',
+                padding: '1.75rem 0',
                 borderBottom: '1px solid var(--border-subtle)',
                 cursor: 'pointer',
                 transition: 'background 0.2s',
@@ -128,7 +129,7 @@ export default function Work() {
               <div>
                 <h3
                   style={{
-                    fontSize: 'clamp(1.25rem, 2.5vw, 2rem)',
+                    fontSize: 'clamp(1.125rem, 2.5vw, 2rem)',
                     fontWeight: 700,
                     letterSpacing: '-0.025em',
                     color: hovered === i ? 'var(--fg)' : 'var(--fg-secondary)',
@@ -151,12 +152,13 @@ export default function Work() {
                 </p>
               </div>
 
-              {/* RippleDistortion preview + CTA */}
+              {/* Preview image + CTA */}
               <div
                 style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}
               >
-                {/* Hover image preview — plain img, no extra WebGL ctx */}
+                {/* Hover image preview — hidden on mobile via CSS */}
                 <div
+                  className="work-preview"
                   style={{
                     width: '80px',
                     height: '54px',
@@ -192,6 +194,7 @@ export default function Work() {
                     justifyContent: 'center',
                     width: '36px',
                     height: '36px',
+                    flexShrink: 0,
                     border: `1px solid ${hovered === i ? 'var(--accent)' : 'var(--border)'}`,
                     color: hovered === i ? 'var(--accent)' : 'var(--muted)',
                     fontSize: '1rem',
@@ -207,6 +210,28 @@ export default function Work() {
           ))}
         </div>
       </div>
+
+      <style>{`
+        /* Mobile: collapse number column, hide preview image */
+        @media (max-width: 640px) {
+          .work-row {
+            grid-template-columns: 2.5rem 1fr auto !important;
+            gap: 0.875rem !important;
+            padding: 1.25rem 0 !important;
+          }
+          .work-preview {
+            display: none !important;
+          }
+        }
+        @media (max-width: 400px) {
+          .work-row {
+            grid-template-columns: 1fr auto !important;
+          }
+          .work-row > span:first-child {
+            display: none;
+          }
+        }
+      `}</style>
     </section>
   );
 }

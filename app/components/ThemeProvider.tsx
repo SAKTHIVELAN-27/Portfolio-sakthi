@@ -38,23 +38,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
-      {/* Script to avoid flicker before hydration */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              try {
-                var saved = localStorage.getItem('theme');
-                if (saved) {
-                  document.documentElement.setAttribute('data-theme', saved);
-                } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-                  document.documentElement.setAttribute('data-theme', 'light');
-                }
-              } catch (e) {}
-            })();
-          `,
-        }}
-      />
       {children}
     </ThemeContext.Provider>
   );

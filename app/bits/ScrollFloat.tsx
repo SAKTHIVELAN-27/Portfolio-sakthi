@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef, Children, isValidElement, cloneElement } from 'react';
+import React, { useEffect, useRef, Children, isValidElement, cloneElement } from 'react';
+
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -16,7 +17,8 @@ interface ScrollFloatProps {
   scrollEnd?: string;
   stagger?: number;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
+  as?: keyof React.JSX.IntrinsicElements;
+
 }
 
 function splitIntoChars(text: string): string[] {

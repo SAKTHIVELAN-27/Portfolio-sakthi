@@ -26,17 +26,12 @@ export default function About() {
         padding: '8rem 0',
         background: 'var(--bg)',
       }}
+      className="section-pad"
     >
       <div className="section-container">
         <SectionDivider index="01" label="About" />
 
         <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '6rem',
-            alignItems: 'start',
-          }}
           className="about-grid"
         >
           {/* Left: Heading */}
@@ -60,6 +55,7 @@ export default function About() {
 
             {/* Stats grid */}
             <div
+              className="about-stats-grid"
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr',
@@ -160,10 +156,24 @@ export default function About() {
       </div>
 
       <style>{`
+        .about-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 6rem;
+          align-items: start;
+        }
         @media (max-width: 900px) {
           .about-grid {
             grid-template-columns: 1fr !important;
             gap: 3rem !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .about-grid {
+            gap: 2.5rem !important;
+          }
+          .about-stats-grid {
+            gap: 1rem !important;
           }
         }
       `}</style>

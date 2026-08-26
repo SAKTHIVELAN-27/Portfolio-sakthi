@@ -22,6 +22,7 @@ export default function Contact() {
         background: 'var(--bg)',
         overflow: 'hidden',
       }}
+      className="section-pad"
     >
       {/* Decorative glow behind CTA */}
       <div
@@ -84,7 +85,7 @@ export default function Contact() {
           <MagneticButton
             as="a"
             href="mailto:sakthivelanm12@gmail.com"
-            className="btn-primary"
+            className="btn-primary contact-cta"
             strength={0.5}
           >
             Send a Message ↗
@@ -92,7 +93,7 @@ export default function Contact() {
           <MagneticButton
             as="a"
             href="/resume.pdf"
-            className="btn-secondary"
+            className="btn-secondary contact-cta"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -105,6 +106,7 @@ export default function Contact() {
 
         {/* Footer row */}
         <div
+          className="contact-footer-row"
           style={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -114,7 +116,7 @@ export default function Contact() {
           }}
         >
           {/* Social links */}
-          <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+          <div className="contact-socials" style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
             {SOCIALS.map((s) => (
               <a
                 key={s.label}
@@ -187,6 +189,25 @@ export default function Contact() {
           </a>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .contact-footer-row {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 1.5rem !important;
+          }
+          .contact-cta {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+        @media (max-width: 400px) {
+          .contact-socials {
+            gap: 1.25rem !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
