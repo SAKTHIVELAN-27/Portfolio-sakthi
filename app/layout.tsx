@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import TargetCursor from "./bits/TargetCursor";
+import { ThemeProvider } from "./components/ThemeProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,17 +43,20 @@ export default function RootLayout({ children }: LayoutProps) {
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-[#050505] text-[#F5F5F5]">
-        <TargetCursor
-          targetSelector=".cursor-target, a, button, [role='button']"
-          spinDuration={2}
-          hideDefaultCursor={true}
-          parallaxOn={true}
-          cursorColor="#ffffff"
-          cursorColorOnTarget="#A78BFA"
-        />
-        {children}
+      <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--fg)]">
+        <ThemeProvider>
+          <TargetCursor
+            targetSelector=".cursor-target, a, button, [role='button']"
+            spinDuration={2}
+            hideDefaultCursor={true}
+            parallaxOn={true}
+            cursorColor="#ffffff"
+            cursorColorOnTarget="#A78BFA"
+          />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

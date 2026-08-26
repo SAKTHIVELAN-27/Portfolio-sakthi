@@ -2,6 +2,7 @@
 
 import SectionDivider from './SectionDivider';
 import MagneticButton from './MagneticButton';
+import FoldText from '../bits/FoldText';
 
 const SOCIALS = [
   { label: 'GitHub', href: 'https://github.com/sakthivelan', icon: '⌥' },
@@ -48,21 +49,22 @@ export default function Contact() {
             marginBottom: '4rem',
           }}
         >
-          <h2
-            className="display-lg"
-            style={{ marginBottom: '1.5rem', lineHeight: 0.95 }}
-          >
-            Let's build something
-            <br />
-            <span
-              style={{
-                WebkitTextStroke: '1px rgba(255,255,255,0.25)',
-                color: 'transparent',
-              }}
-            >
-              remarkable.
-            </span>
-          </h2>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <FoldText
+              text="Let's build something remarkable."
+              splitBy="word"
+              hinge="top"
+              trigger="scroll"
+              duration={0.65}
+              stagger={0.045}
+              ease="power3.out"
+              perspective={700}
+              creaseShading={0.55}
+              fontSize="clamp(2.5rem, 6vw, 5.5rem)"
+              fontWeight={800}
+              color="var(--fg)"
+            />
+          </div>
           <p className="text-body-lg" style={{ maxWidth: '500px' }}>
             Open to full-time roles, freelance projects, and creative
             collaborations. If you have an idea worth building — let's talk.

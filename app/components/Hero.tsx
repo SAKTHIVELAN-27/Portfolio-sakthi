@@ -4,6 +4,7 @@ import RippleDistortion from '../bits/RippleDistortion';
 import StrokeText from '../bits/StrokeText';
 import MagneticButton from './MagneticButton';
 import TextType from '../bits/TextType';
+import FoldText from '../bits/FoldText';
 
 export default function Hero() {
   return (
@@ -19,7 +20,7 @@ export default function Hero() {
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
-        background: '#050505',
+        background: 'var(--bg)',
       }}
     >
       {/* ── Layer 1: RippleDistortion Background ───── */}
@@ -52,7 +53,7 @@ export default function Hero() {
         />
       </div>
 
-      {/* ── Layer 2: Dark gradient overlay ──────────── */}
+      {/* ── Layer 2: Gradient overlay ──────────── */}
       <div
         style={{
           position: 'absolute',
@@ -60,12 +61,8 @@ export default function Hero() {
           zIndex: 1,
           pointerEvents: 'none',
           background: [
-            /* heavy bottom vignette — keeps type legible */
-            'linear-gradient(to top, rgba(5,5,5,0.92) 0%, rgba(5,5,5,0.55) 35%, rgba(5,5,5,0.18) 65%, rgba(5,5,5,0.35) 100%)',
-            /* left side — text area */
-            'linear-gradient(to right, rgba(5,5,5,0.65) 0%, transparent 55%)',
-            /* radial atmosphere — barely-visible violet breath */
-            'radial-gradient(ellipse 80% 50% at 50% 100%, rgba(167,139,250,0.06) 0%, transparent 60%)',
+            'linear-gradient(to top, var(--bg) 0%, transparent 60%)',
+            'radial-gradient(ellipse 80% 50% at 50% 100%, var(--accent-glow) 0%, transparent 60%)',
           ].join(', '),
         }}
       />
@@ -78,7 +75,7 @@ export default function Hero() {
           zIndex: 1,
           pointerEvents: 'none',
           opacity: 0.03,
-          backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.4) 2px, rgba(255,255,255,0.4) 3px)',
+          backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, var(--fg) 2px, var(--fg) 3px)',
           backgroundSize: '100% 3px',
         }}
       />
@@ -209,8 +206,8 @@ export default function Hero() {
         >
           <StrokeText
             text="SAKTHI"
-            strokeColor="#A78BFA"
-            fillColor="#F5F5F5"
+            strokeColor="var(--accent)"
+            fillColor="var(--fg)"
             strokeWidth={1.4}
             drawDuration={1.6}
             fillDelay={0.2}
@@ -225,20 +222,28 @@ export default function Hero() {
         </div>
 
         {/* Tagline */}
-        <p
+        <div
           style={{
-            fontSize: 'clamp(1rem, 1.8vw, 1.2rem)',
-            color: 'var(--fg-secondary)',
-            maxWidth: '420px',
-            lineHeight: 1.7,
+            maxWidth: '460px',
             marginBottom: '2.5rem',
             animation: 'fadeUp 1s ease 1.8s both',
           }}
         >
-          Building at the intersection of intelligence and interface.
-          <br />
-          Crafting digital experiences that feel alive.
-        </p>
+          <FoldText
+            text="Building at the intersection of intelligence and interface."
+            splitBy="word"
+            hinge="top"
+            trigger="mount"
+            duration={0.65}
+            stagger={0.045}
+            ease="power3.out"
+            perspective={700}
+            creaseShading={0.55}
+            fontSize="clamp(1rem, 1.8vw, 1.2rem)"
+            fontWeight={500}
+            color="var(--fg-secondary)"
+          />
+        </div>
 
         {/* CTA buttons */}
         <div

@@ -1,6 +1,6 @@
 'use client';
 
-import ScrollFloat from '../bits/ScrollFloat';
+import FoldText from '../bits/FoldText';
 import SectionDivider from './SectionDivider';
 
 const STATS = [
@@ -41,19 +41,22 @@ export default function About() {
         >
           {/* Left: Heading */}
           <div>
-            <h2 className="display-lg" style={{ marginBottom: '2rem' }}>
-              <ScrollFloat
-                animationDuration={1}
-                ease="back.inOut(2)"
-                scrollStart="center bottom+=50%"
-                scrollEnd="bottom bottom-=40%"
-                stagger={0.03}
-                as="span"
-                className="display-lg"
-              >
-                Building at the intersection of intelligence and interface.
-              </ScrollFloat>
-            </h2>
+            <div style={{ marginBottom: '2rem' }}>
+              <FoldText
+                text="Building at the intersection of intelligence and interface."
+                splitBy="word"
+                hinge="top"
+                trigger="scroll"
+                duration={0.65}
+                stagger={0.045}
+                ease="power3.out"
+                perspective={700}
+                creaseShading={0.55}
+                fontSize="clamp(2.25rem, 4.5vw, 4rem)"
+                fontWeight={800}
+                color="var(--fg)"
+              />
+            </div>
 
             {/* Stats grid */}
             <div
