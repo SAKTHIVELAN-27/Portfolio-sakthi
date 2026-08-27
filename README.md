@@ -29,6 +29,17 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## Production Build & Run
+
+To build and run the application in production mode natively:
+
+```bash
+npm run build
+npm start
+```
+
+For instructions on deploying to an AWS EC2 instance using Node.js & PM2 (with Nginx and SSL), see the [DEPLOYMENT.md](DEPLOYMENT.md) guide.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
