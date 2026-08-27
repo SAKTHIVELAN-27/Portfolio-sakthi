@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, Children, isValidElement, cloneElement } from 'react';
+import React, { useEffect, useRef, Children, isValidElement, cloneElement, type ElementType } from 'react';
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -17,8 +17,7 @@ interface ScrollFloatProps {
   scrollEnd?: string;
   stagger?: number;
   className?: string;
-  as?: keyof React.JSX.IntrinsicElements;
-
+  as?: ElementType;
 }
 
 function splitIntoChars(text: string): string[] {
@@ -84,9 +83,10 @@ export default function ScrollFloat({
     };
   }, [text, animationDuration, ease, scrollStart, scrollEnd, stagger]);
 
+  const Component = Tag as React.ElementType;
+
   return (
-    // @ts-ignore – dynamic tag
-    <Tag
+    <Component
       ref={containerRef}
       className={className}
       aria-label={text}
@@ -105,6 +105,6 @@ export default function ScrollFloat({
           {char === ' ' ? '\u00A0' : char}
         </span>
       ))}
-    </Tag>
+    </Component>
   );
 }
